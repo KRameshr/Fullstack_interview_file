@@ -1,1 +1,431 @@
+✅ 🔰 Beginner-Level React Interview Questions (Cleaned & Arranged)
+1. What is React?
+
+React is a JavaScript library used to build UI using components.
+
+2. What is JSX?
+
+JSX = JavaScript + HTML.
+It must return one parent element.
+
+3. What is a Component?
+
+Component = reusable UI block.
+Types: Functional component (modern), Class component (old).
+
+4. What are Props?
+
+Props = data passed from parent → child.
+Props are read-only.
+
+5. What is State?
+
+State = component data that can change.
+
+6. Difference between Props & State
+Props	State
+Read-only	Mutable
+Passed from parent	Stored inside component
+Cannot change	Can change via setState/useState
+7. What is useState()?
+
+React hook to store and update data.
+
+8. What is useEffect()?
+
+Handles side effects → API calls, timers, subscriptions.
+
+9. What is Virtual DOM?
+
+A lightweight copy of Real DOM; React updates only changed parts.
+
+10. What is One-way Data Flow?
+
+Data flows parent → child only.
+
+11. What are Keys in React Lists?
+
+Keys help React identify which item changed in a list.
+
+12. What are Controlled Components?
+
+Form inputs controlled by React state.
+
+13. What are Uncontrolled Components?
+
+Form inputs controlled by DOM (using useRef).
+
+14. What is Conditional Rendering?
+
+Rendering UI based on condition:
+{isLoggedIn ? <Home/> : <Login/>}
+
+15. What is Fragment <>?</>?
+
+Wrapper without creating an extra <div>.
+
+16. What is Lifting State Up?
+
+Moving state from child → parent to share data.
+
+✅ ⚡ Medium-Level React Interview Questions (Cleaned)
+17. What is Reconciliation?
+
+React’s process of comparing old vs new Virtual DOM and updating only changes.
+
+18. What are React Hooks? Why introduced?
+
+Hooks provide state & lifecycle features in functional components.
+Introduced to replace complex class components.
+
+19. Rules of Hooks
+
+Call hooks at top level
+
+Call hooks only inside functional components
+
+20. What is useRef()?
+
+Used to access DOM elements or store values without re-render.
+
+21. Difference between useRef() and createRef()?
+useRef	createRef
+Value persists across renders	Creates new ref on each render
+Used in functional components	Used in class components
+22. What is useReducer()?
+
+Alternative to useState for complex logic.
+
+23. What is Context API?
+
+Used to avoid prop drilling and share global data.
+
+24. What is Prop Drilling? How to fix?
+
+Passing props through multiple components unnecessarily.
+Fix using: Context API / Redux / Zustand
+
+25. What is React.memo()?
+
+Prevents re-render if props do not change.
+Used for optimization.
+
+26. What is useCallback()?
+
+Memoizes a function.
+
+27. What is useMemo()?
+
+Memoizes a heavy calculation.
+
+Difference:
+
+useCallback → returns a function
+
+useMemo → returns a value
+
+28. How does React batching work?
+
+React combines multiple setState updates into one render.
+
+29. What are Error Boundaries?
+
+Components that catch JavaScript errors.
+Works only in class components.
+
+30. What is React Fiber?
+
+Internal engine that improves rendering & scheduling.
+
+31. What is Lazy Loading?
+
+Loading components only when needed.
+
+32. What is Code Splitting?
+
+Breaking bundle into smaller chunks using React.lazy + Suspense.
+
+33. What is React Router?
+
+Library used for navigation and routing.
+
+34. What is Redux?
+
+State management library for large applications.
+
+35. Difference between CSR and SSR?
+CSR	SSR
+Browser renders pages	Server renders HTML
+Slow first load	Fast first load
+Used in React apps	Used in Next.js
+
+
+
+✅ 1. Counter Component (useState)
+Interview-Style Answer:
+
+“A counter is built using useState. We update state using setCount.”
+
+Code:
+import { useState } from "react";
+
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <h2>{count}</h2>
+      <button onClick={() => setCount(count + 1)}>+</button>
+      <button onClick={() => setCount(count - 1)}>-</button>
+      <button onClick={() => setCount(0)}>Reset</button>
+    </div>
+  );
+}
+
+✅ 2. Fetch Users from API (useEffect)
+Interview-Style Answer:
+
+“I used useEffect to call an API when component loads.”
+
+Code:
+import { useEffect, useState } from "react";
+
+function Users() {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    fetch("https://jsonplaceholder.typicode.com/users")
+      .then(res => res.json())
+      .then(data => setUsers(data));
+  }, []);
+
+  return (
+    <div>
+      {users.map(u => (
+        <p key={u.id}>{u.name}</p>
+      ))}
+    </div>
+  );
+}
+
+✅ 3. Search Filter
+Interview-Style Answer:
+
+“I created a search bar that filters a list using useState.”
+
+Code:
+import { useState } from "react";
+
+function SearchList() {
+  const items = ["apple", "banana", "mango", "orange"];
+  const [search, setSearch] = useState("");
+
+  const filtered = items.filter(i =>
+    i.toLowerCase().includes(search.toLowerCase())
+  );
+
+  return (
+    <div>
+      <input 
+        placeholder="Search..."
+        onChange={(e) => setSearch(e.target.value)}
+      />
+
+      {filtered.map((item, i) => (
+        <p key={i}>{item}</p>
+      ))}
+    </div>
+  );
+}
+
+✅ 4. Todo App
+Interview-Style Answer:
+
+“I used an array in state and updated it using spread operator.”
+
+Code:
+import { useState } from "react";
+
+function TodoApp() {
+  const [todos, setTodos] = useState([]);
+  const [text, setText] = useState("");
+
+  const addTodo = () => {
+    setTodos([...todos, text]);
+    setText("");
+  };
+
+  const deleteTodo = (index) => {
+    setTodos(todos.filter((_, i) => i !== index));
+  };
+
+  return (
+    <div>
+      <input 
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+      />
+      <button onClick={addTodo}>Add</button>
+
+      <ul>
+        {todos.map((t, i) => (
+          <li key={i}>
+            {t} 
+            <button onClick={() => deleteTodo(i)}>❌</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+✅ 5. Controlled Form Component
+Interview-Style Answer:
+
+“A controlled component means the value comes from state.”
+
+Code:
+import { useState } from "react";
+
+function Form() {
+  const [name, setName] = useState("");
+
+  return (
+    <div>
+      <input 
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+      <p>Name: {name}</p>
+    </div>
+  );
+}
+
+✅ 6. Context API Example
+Interview-Style Answer:
+
+“I used Context to avoid prop drilling.”
+
+Code:
+import { createContext, useContext } from "react";
+
+const UserContext = createContext();
+
+function Parent() {
+  return (
+    <UserContext.Provider value="Ramesh">
+      <Child />
+    </UserContext.Provider>
+  );
+}
+
+function Child() {
+  const user = useContext(UserContext);
+  return <h1>Hello {user}</h1>;
+}
+
+✅ 7. Timer Component
+Interview-Style Answer:
+
+“I used setInterval inside useEffect and cleaned it up.”
+
+Code:
+import { useEffect, useState } from "react";
+
+function Timer() {
+  const [time, setTime] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => setTime(t => t + 1), 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  return <h1>{time}</h1>;
+}
+
+✅ 8. Custom Hook (useFetch)
+Interview-Style Answer:
+
+“A custom hook is a reusable logic function.”
+
+Code:
+import { useState, useEffect } from "react";
+
+export function useFetch(url) {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetch(url)
+      .then(res => res.json())
+      .then(data => setData(data));
+  }, [url]);
+
+  return data;
+}
+
+
+Use it like:
+
+const users = useFetch("https://jsonplaceholder.typicode.com/users");
+
+✅ 9. React Router Example
+Interview-Style Answer:
+
+“I created two pages and used Routes + Link.”
+
+Code:
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+
+function Home() { return <h1>Home Page</h1>; }
+function About() { return <h1>About Page</h1>; }
+
+function App() {
+  return (
+    <BrowserRouter>
+      <nav>
+        <Link to="/">Home</Link> | 
+        <Link to="/about">About</Link>
+      </nav>
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+✅ 10. React.memo + useCallback + useMemo
+Interview-Style Answer:
+
+“These are used for performance optimization.”
+
+Code:
+import { useState, useCallback, useMemo } from "react";
+import React from "react";
+
+const Child = React.memo(({ value }) => {
+  console.log("Child rendered");
+  return <h2>{value}</h2>;
+});
+
+function App() {
+  const [count, setCount] = useState(0);
+
+  const expensiveValue = useMemo(() => {
+    return count * 2;
+  }, [count]);
+
+  const increment = useCallback(() => {
+    setCount(c => c + 1);
+  }, []);
+
+  return (
+    <div>
+      <Child value={expensiveValue} />
+      <button onClick={increment}>+</button>
+    </div>
+  );
+}
 
